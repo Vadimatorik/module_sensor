@@ -9,7 +9,7 @@
 struct mpu6050_cfg {
     uint32_t                            period;
     uint8_t                             prio;
-    USER_OS_STATIC_BIN_SEMAPHORE*       ext_semaphore;
+    USER_OS_STATIC_BIN_SEMAPHORE*       ext_semaphore;// синхонизация внешних потоков. Выставляется при готовности решения.
 };
 
 class mpu6050_i2c {
@@ -31,8 +31,8 @@ private:
 
     const mpu6050_cfg*                      const cfg;
 
-    mutable float accelerometer[3];
-    mutable float magnetometer[3];
+    mutable float accelerometer[3];// данные акселерометра xyz g
+    mutable float magnetometer[3];  //даныне гироскопа xyz rad/sec
 
     mutable USER_OS_STATIC_STACK_TYPE               tb[ MPU6050_STACK_SIZE ] = { 0 };
     mutable USER_OS_STATIC_TASK_STRUCT_TYPE         ts;
@@ -40,6 +40,7 @@ private:
     mutable USER_OS_STATIC_MUTEX                    m             = nullptr;
     mutable USER_OS_STATIC_MUTEX_BUFFER             mb;
 
+    //синхронизация по готовности решения(внтуренняя, по прерыванию на ножке IMU)
     mutable USER_OS_STATIC_BIN_SEMAPHORE            s             = nullptr;
     mutable USER_OS_STATIC_BIN_SEMAPHORE_BUFFER     sb;
 };
