@@ -25,6 +25,10 @@ public:
 private:
     static void thread ( void* p_cfg );
 
+    int     get_raw_accel_gyro ( int16_t* accel_gyro );
+    void    add_bias ( int16_t *d );
+    void    hardware_init ( void );
+
     const mpu6050_cfg*                      const cfg;
 
     mutable float accelerometer[3];
