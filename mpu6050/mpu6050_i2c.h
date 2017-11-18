@@ -4,10 +4,12 @@
 
 #include "user_os.h"
 
-#define MPU6050_STACK_SIZE              300
+#define MPU6050_STACK_SIZE              400
 
 struct mpu6050_cfg {
-
+    uint32_t                            period;
+    uint8_t                             prio;
+    USER_OS_STATIC_BIN_SEMAPHORE*       ext_semaphore;
 };
 
 class mpu6050_i2c {
@@ -21,15 +23,21 @@ public:
     void    data_ready_IRQ  ( void );
 
 private:
-    const mpu6050_cfg*              const cfg;
-    USER_OS_STATIC_STACK_TYPE       task_stack[ MPU6050_STACK_SIZE ] = { 0 };
-    USER_OS_STATIC_TASK_STRUCT_TYPE task_struct;
+    static void thread ( void* p_cfg );
 
-    USER_OS_STATIC_MUTEX                    m             = nullptr;
-    USER_OS_STATIC_MUTEX_BUFFER             mb;
+    const mpu6050_cfg*                      const cfg;
 
-    USER_OS_STATIC_BIN_SEMAPHORE            s             = nullptr;
-    USER_OS_STATIC_BIN_SEMAPHORE_BUFFER     sb;
+    mutable float accelerometer[3];
+    mutable float magnetometer[3];
+
+    mutable USER_OS_STATIC_STACK_TYPE               tb[ MPU6050_STACK_SIZE ] = { 0 };
+    mutable USER_OS_STATIC_TASK_STRUCT_TYPE         ts;
+
+    mutable USER_OS_STATIC_MUTEX                    m             = nullptr;
+    mutable USER_OS_STATIC_MUTEX_BUFFER             mb;
+
+    mutable USER_OS_STATIC_BIN_SEMAPHORE            s             = nullptr;
+    mutable USER_OS_STATIC_BIN_SEMAPHORE_BUFFER     sb;
 };
 
 #endif
