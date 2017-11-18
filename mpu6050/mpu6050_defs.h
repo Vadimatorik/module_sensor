@@ -1,12 +1,4 @@
-/*
- * mpu6050_defs.h
- *
- *  Created on: 07 марта 2016 г.
- *      Author: jdi
- */
-
-#ifndef MPU6050_DEFS_H_
-#define MPU6050_DEFS_H_
+#pragma once
 
 #define MPU6050_ADDRESS_AD0_LOW     0x68 // address pin low (GND), default for InvenSense evaluation board
 #define MPU6050_ADDRESS_AD0_HIGH    0x69 // address pin high (VCC)
@@ -360,6 +352,3 @@
 #define MPU6050_DMP_MEMORY_BANKS        8
 #define MPU6050_DMP_MEMORY_BANK_SIZE    256
 #define MPU6050_DMP_MEMORY_CHUNK_SIZE   16
-
-
-#endif /* MPU6050_DEFS_H_ */
