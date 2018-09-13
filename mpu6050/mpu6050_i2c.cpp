@@ -82,11 +82,14 @@ int mpu6050_i2c::get_data_sync ( float accelerometer[3], float magnetometer[3] )
 
 //возвращает 0 в случае успеха
 int mpu6050_i2c::get_raw_accel_gyro ( int16_t* accel_gyro ) {
-    int i, rv = 1;
+    int i;
     uint8_t tmpBuffer[14];
-    rv = this->cfg->i2c->read_dma( MPU6050_DEFAULT_ADDRESS, tmpBuffer, MPU6050_RA_ACCEL_XOUT_H, 14);
 
-    if ( rv != 0 ) return rv;
+    McHardwareInterfaces::BaseResult rv;
+    rv = this->cfg->i2c->readDma( MPU6050_DEFAULT_ADDRESS, tmpBuffer, MPU6050_RA_ACCEL_XOUT_H, 14);
+
+    if ( rv != McHardwareInterfaces::BaseResult::ok )
+    	return -1;
 
     /* Get acceleration */
     for (i = 0; i < 3; i++)
@@ -94,7 +97,8 @@ int mpu6050_i2c::get_raw_accel_gyro ( int16_t* accel_gyro ) {
     /* Get Angular rate */
     for (i = 4; i < 7; i++)
         accel_gyro[i - 1] = ((uint16_t) ((uint16_t) tmpBuffer[2 * i] << 8) + tmpBuffer[2 * i + 1]);
-    return rv;
+
+    return 0;
 }
 
 void mpu6050_i2c::add_bias ( int16_t *d ) {
@@ -134,6 +138,6 @@ void mpu6050_i2c::write_bits ( uint8_t slave_addr, uint8_t reg_addr, uint8_t bit
     data &= mask; // zero all non-important bits in data
     tmp &= ~(mask); // zero all important bits in existing byte
     tmp |= data; // combine data with existing byte
-     this->cfg->i2c->write_byte( slave_addr, &tmp, reg_addr);
+     this->cfg->i2c->writeByte( slave_addr, &tmp, reg_addr);
 }
 

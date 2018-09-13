@@ -9,10 +9,10 @@
 #define MPU6050_STACK_SIZE              400
 
 struct mpu6050_cfg {
-    uint32_t                            period;
-    uint8_t                             prio;
-    i2c_base*                           i2c;
-    USER_OS_STATIC_BIN_SEMAPHORE*       ext_semaphore;// синхонизация внешних потоков. Выставляется при готовности решения.
+    uint32_t                          		period;
+    uint8_t                         	    prio;
+    McHardwareInterfaces::I2cMaster*        i2c;
+    USER_OS_STATIC_BIN_SEMAPHORE*     		ext_semaphore;// синхонизация внешних потоков. Выставляется при готовности решения.
 };
 
 class mpu6050_i2c {
